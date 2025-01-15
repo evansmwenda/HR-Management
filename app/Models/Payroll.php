@@ -18,7 +18,6 @@ class Payroll extends Model
         'allowances',
         'deductions',
         'net_salary',
-        'status',
     ];
 
     public function employee()

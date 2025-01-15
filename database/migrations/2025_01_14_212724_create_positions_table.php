@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Department;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -13,6 +14,11 @@ return new class extends Migration
     {
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(Department::class)->constrained();
+            $table->string('title');
+            $table->text('description');
+            $table->decimal('salary_range_start', 10, 2);
+            $table->decimal('salary_range_end', 10, 2);
             $table->timestamps();
         });
     }

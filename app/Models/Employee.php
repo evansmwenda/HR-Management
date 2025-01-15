@@ -16,7 +16,6 @@ class Employee extends Model
         'status',
         'address',
         'emergency_contact',
-        'bank_info',
     ];
 
     public function department()

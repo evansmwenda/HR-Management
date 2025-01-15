@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Manager;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -24,6 +23,6 @@ class Department extends Model
 
     public function manager()
     {
-        return $this->belongsTo(Manager::class);
+        return $this->belongsTo(Employee::class,'manager_id');
     }
 }

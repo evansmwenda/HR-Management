@@ -15,8 +15,6 @@ class Document extends Model
         'title',
         'type',
         'file_path',
-        'expiry_date',
-        'status',
     ];
 
     public function employee()
