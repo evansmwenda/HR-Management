@@ -2,16 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DocumentResource\Pages;
-use App\Filament\Resources\DocumentResource\RelationManagers;
-use App\Models\Document;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Document;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\DocumentResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\DocumentResource\RelationManagers;
 
 class DocumentResource extends Resource
 {
@@ -23,14 +25,14 @@ class DocumentResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('employee_id')
+                TextInput::make('employee_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('title')
+                TextInput::make('title')
                     ->required(),
-                Forms\Components\TextInput::make('type')
+                TextInput::make('type')
                     ->required(),
-                Forms\Components\TextInput::make('file_path')
+                TextInput::make('file_path')
                     ->required(),
             ]);
     }
@@ -39,20 +41,20 @@ class DocumentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('employee_id')
+                TextColumn::make('employee_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('type')
+                TextColumn::make('type')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('file_path')
+                TextColumn::make('file_path')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

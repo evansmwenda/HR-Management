@@ -59,21 +59,6 @@ class User extends Authenticatable implements FilamentUser
         );
     }
 
-    public function getFilamentName(): string
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
-
-    public function getFullNameAttribute(): string
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
-
-    public function canAccessFilament(): bool
-    {
-        return true; // Add your authorization logic here
-    }
-
     public function canAccessPanel(Panel $panel = null): bool
     {
         return true;

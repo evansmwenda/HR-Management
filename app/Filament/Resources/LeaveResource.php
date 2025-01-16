@@ -2,16 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\LeaveResource\Pages;
-use App\Filament\Resources\LeaveResource\RelationManagers;
-use App\Models\Leave;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Leave;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\LeaveResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\LeaveResource\RelationManagers;
 
 class LeaveResource extends Resource
 {
@@ -23,20 +27,20 @@ class LeaveResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('employee_id')
+                TextInput::make('employee_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('leave_type')
+                TextInput::make('leave_type')
                     ->required(),
-                Forms\Components\DatePicker::make('start_date')
+                DatePicker::make('start_date')
                     ->required(),
-                Forms\Components\DatePicker::make('end_date')
+                DatePicker::make('end_date')
                     ->required(),
-                Forms\Components\TextInput::make('leave_status')
+                TextInput::make('leave_status')
                     ->required(),
-                Forms\Components\Textarea::make('reason')
+                Textarea::make('reason')
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('approvied_by')
+                TextInput::make('approvied_by')
                     ->required()
                     ->numeric(),
             ]);
@@ -46,27 +50,27 @@ class LeaveResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('employee_id')
+                TextColumn::make('employee_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('leave_type')
+                TextColumn::make('leave_type')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('start_date')
+                TextColumn::make('start_date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('end_date')
+                TextColumn::make('end_date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('leave_status')
+                TextColumn::make('leave_status')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('approvied_by')
+                TextColumn::make('approvied_by')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

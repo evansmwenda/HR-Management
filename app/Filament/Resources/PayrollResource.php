@@ -2,16 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PayrollResource\Pages;
-use App\Filament\Resources\PayrollResource\RelationManagers;
-use App\Models\Payroll;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Payroll;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PayrollResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PayrollResource\RelationManagers;
 
 class PayrollResource extends Resource
 {
@@ -23,21 +27,21 @@ class PayrollResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('employee_id')
+                TextInput::make('employee_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\DatePicker::make('period_start')
+                DatePicker::make('period_start')
                     ->required(),
-                Forms\Components\DatePicker::make('period_end')
+                DatePicker::make('period_end')
                     ->required(),
-                Forms\Components\TextInput::make('basic_salary')
+                TextInput::make('basic_salary')
                     ->required()
                     ->numeric(),
-                Forms\Components\Textarea::make('allowances')
+                Textarea::make('allowances')
                     ->columnSpanFull(),
-                Forms\Components\Textarea::make('deductions')
+                Textarea::make('deductions')
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('net_salary')
+                TextInput::make('net_salary')
                     ->required()
                     ->numeric(),
             ]);
@@ -47,26 +51,26 @@ class PayrollResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('employee_id')
+                TextColumn::make('employee_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('period_start')
+                TextColumn::make('period_start')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('period_end')
+                TextColumn::make('period_end')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('basic_salary')
+                TextColumn::make('basic_salary')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('net_salary')
+                TextColumn::make('net_salary')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

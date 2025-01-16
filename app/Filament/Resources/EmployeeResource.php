@@ -2,16 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\EmployeeResource\Pages;
-use App\Filament\Resources\EmployeeResource\RelationManagers;
-use App\Models\Employee;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Employee;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\EmployeeResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\EmployeeResource\RelationManagers;
 
 class EmployeeResource extends Resource
 {
@@ -23,18 +26,18 @@ class EmployeeResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('department_id')
+                TextInput::make('department_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('position_id')
+                TextInput::make('position_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\DatePicker::make('hire_date')
+                DatePicker::make('hire_date')
                     ->required(),
-                Forms\Components\TextInput::make('status')
+                TextInput::make('status')
                     ->required(),
-                Forms\Components\TextInput::make('address'),
-                Forms\Components\TextInput::make('emergency_contact'),
+                TextInput::make('address'),
+                TextInput::make('emergency_contact'),
             ]);
     }
 
@@ -42,26 +45,26 @@ class EmployeeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('department_id')
+                TextColumn::make('department_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('position_id')
+                TextColumn::make('position_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('hire_date')
+                TextColumn::make('hire_date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('status')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('address')
+                TextColumn::make('address')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('emergency_contact')
+                TextColumn::make('emergency_contact')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

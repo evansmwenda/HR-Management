@@ -2,16 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AttendanceResource\Pages;
-use App\Filament\Resources\AttendanceResource\RelationManagers;
-use App\Models\Attendance;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
+use App\Models\Attendance;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\AttendanceResource\Pages;
+use App\Filament\Resources\AttendanceResource\RelationManagers;
 
 class AttendanceResource extends Resource
 {
@@ -23,16 +27,16 @@ class AttendanceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('employee_id')
+                TextInput::make('employee_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\DatePicker::make('date')
+                DatePicker::make('date')
                     ->required(),
-                Forms\Components\TextInput::make('check_in'),
-                Forms\Components\TextInput::make('check_out'),
-                Forms\Components\TextInput::make('status')
+                TextInput::make('check_in'),
+                TextInput::make('check_out'),
+                TextInput::make('status')
                     ->required(),
-                Forms\Components\Textarea::make('notes')
+                Textarea::make('notes')
                     ->columnSpanFull(),
             ]);
     }
@@ -41,21 +45,21 @@ class AttendanceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('employee_id')
+                TextColumn::make('employee_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('date')
+                TextColumn::make('date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('check_in'),
-                Tables\Columns\TextColumn::make('check_out'),
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('check_in'),
+                TextColumn::make('check_out'),
+                TextColumn::make('status')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

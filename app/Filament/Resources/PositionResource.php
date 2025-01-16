@@ -2,16 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PositionResource\Pages;
-use App\Filament\Resources\PositionResource\RelationManagers;
-use App\Models\Position;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Position;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PositionResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PositionResource\RelationManagers;
 
 class PositionResource extends Resource
 {
@@ -23,18 +26,18 @@ class PositionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('department_id')
+                TextInput::make('department_id')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('title')
+                TextInput::make('title')
                     ->required(),
-                Forms\Components\Textarea::make('description')
+                Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('salary_range_start')
+                TextInput::make('salary_range_start')
                     ->required()
                     ->numeric(),
-                Forms\Components\TextInput::make('salary_range_end')
+                TextInput::make('salary_range_end')
                     ->required()
                     ->numeric(),
             ]);
@@ -44,22 +47,22 @@ class PositionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('department_id')
+                TextColumn::make('department_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('title')
+                TextColumn::make('title')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('salary_range_start')
+                TextColumn::make('salary_range_start')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('salary_range_end')
+                TextColumn::make('salary_range_end')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

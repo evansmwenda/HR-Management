@@ -2,16 +2,20 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\DateTimePicker;
+use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\UserResource\RelationManagers;
+use Filament\Forms\Components\Section;
 
 class UserResource extends Resource
 {
@@ -23,20 +27,32 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('first_name')
+                Section::make
+                ([
+                    TextInput::make('first_name')
                     ->required(),
-                Forms\Components\TextInput::make('last_name')
-                    ->required(),
-                Forms\Components\TextInput::make('phone')
-                    ->tel()
-                    ->required(),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required(),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required(),
+                    TextInput::make('last_name')
+                        ->required(),
+                    TextInput::make('phone')
+                        ->tel()
+                        ->minLength(10)
+                        ->maxLength(14)
+                        ->required(),
+                    TextInput::make('email')
+                        ->email()
+                        ->unique()
+                        ->required(),
+                    TextInput::make('password')
+                        ->password()
+                        ->required()
+                        ->same('passwordConfirmation'),
+
+                    TextInput::make('passwordConfirmation')
+                        ->password()
+                        ->required(),
+                ])
+                ->columns(2)
+                
             ]);
     }
 
@@ -44,22 +60,19 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('first_name')
+                TextColumn::make('first_name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('last_name')
+                TextColumn::make('last_name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('phone')
+                TextColumn::make('phone')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email')
+                TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -68,6 +81,7 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -90,6 +104,7 @@ class UserResource extends Resource
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
+            'view' => Pages\ViewUser::route('/{record}'),
         ];
     }
 }
