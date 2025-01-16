@@ -5,9 +5,14 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Employee;
+use App\Models\Position;
 use Filament\Forms\Form;
+use App\Models\Department;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use App\Enums\EmployeeStatusEnum;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
@@ -26,18 +31,27 @@ class EmployeeResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('department_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('position_id')
-                    ->required()
-                    ->numeric(),
-                DatePicker::make('hire_date')
-                    ->required(),
-                TextInput::make('status')
-                    ->required(),
-                TextInput::make('address'),
-                TextInput::make('emergency_contact'),
+                Section::make([
+                    Select::make('department_id')
+                        ->label('Department')
+                        ->options(Department::all()->pluck('name', 'id'))
+                        ->searchable()
+                        ->required(),
+                    Select::make('position_id')
+                        ->label('Position')
+                        ->options(Position::all()->pluck('title', 'id'))
+                        ->searchable()
+                        ->required(),
+                    DatePicker::make('hire_date')
+                        ->required(),
+                    Select::make('status')
+                        ->label('Employee Status')
+                        ->options(collect(EmployeeStatusEnum::cases())->pluck('value', 'name')->toArray())
+                        ->searchable()
+                        ->required(),
+                    TextInput::make('address'),
+                    TextInput::make('emergency_contact'),
+                ])->columns(2)
             ]);
     }
 
@@ -45,12 +59,9 @@ class EmployeeResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('department_id')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('position_id')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('department.name')
+                    ->badge(),
+                TextColumn::make('position.title'),
                 TextColumn::make('hire_date')
                     ->date()
                     ->sortable(),
@@ -73,6 +84,7 @@ class EmployeeResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -95,6 +107,7 @@ class EmployeeResource extends Resource
             'index' => Pages\ListEmployees::route('/'),
             'create' => Pages\CreateEmployee::route('/create'),
             'edit' => Pages\EditEmployee::route('/{record}/edit'),
+            'view' => Pages\ViewEmployee::route('/{record}'),
         ];
     }
 }

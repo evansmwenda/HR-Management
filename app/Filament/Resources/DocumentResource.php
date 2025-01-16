@@ -5,15 +5,18 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Document;
+use App\Models\Employee;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\DocumentResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DocumentResource\RelationManagers;
+use Filament\Forms\Components\FileUpload;
 
 class DocumentResource extends Resource
 {
@@ -25,14 +28,16 @@ class DocumentResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('employee_id')
+                Select::make('employee_id')
+                    ->label('Employee')
                     ->required()
-                    ->numeric(),
+                    ->options(Employee::all()->pluck('name', 'id'))
+                    ->searchable(),
                 TextInput::make('title')
                     ->required(),
                 TextInput::make('type')
                     ->required(),
-                TextInput::make('file_path')
+                FileUpload::make('file_path')
                     ->required(),
             ]);
     }
@@ -41,9 +46,8 @@ class DocumentResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('employee_id')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('employee.name')
+                    ->searchable(),
                 TextColumn::make('title')
                     ->searchable(),
                 TextColumn::make('type')
@@ -63,6 +67,7 @@ class DocumentResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -85,6 +90,7 @@ class DocumentResource extends Resource
             'index' => Pages\ListDocuments::route('/'),
             'create' => Pages\CreateDocument::route('/create'),
             'edit' => Pages\EditDocument::route('/{record}/edit'),
+            'view' => Pages\ViewDocument::route('/{record}'),
         ];
     }
 }

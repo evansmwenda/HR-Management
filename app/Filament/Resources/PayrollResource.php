@@ -5,9 +5,11 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Payroll;
+use App\Models\Employee;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -16,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\PayrollResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PayrollResource\RelationManagers;
+use Filament\Forms\Components\Section;
 
 class PayrollResource extends Resource
 {
@@ -27,23 +30,33 @@ class PayrollResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('employee_id')
+                Section::make([
+                    Select::make('employee_id')
+                    ->label('Employee')
                     ->required()
-                    ->numeric(),
-                DatePicker::make('period_start')
-                    ->required(),
-                DatePicker::make('period_end')
-                    ->required(),
-                TextInput::make('basic_salary')
-                    ->required()
-                    ->numeric(),
-                Textarea::make('allowances')
-                    ->columnSpanFull(),
-                Textarea::make('deductions')
-                    ->columnSpanFull(),
-                TextInput::make('net_salary')
-                    ->required()
-                    ->numeric(),
+                    ->preload()
+                    ->options(Employee::all()->map(function ($employee) {
+                        return [
+                            'id' => $employee->id,
+                            'name' => $employee->first_name . ' ' . $employee->last_name,
+                        ];
+                    })->pluck('name', 'id'))
+                    ->searchable(),
+                    DatePicker::make('period_start')
+                        ->required(),
+                    DatePicker::make('period_end')
+                        ->required(),
+                    TextInput::make('basic_salary')
+                        ->required()
+                        ->numeric(),
+                    Textarea::make('allowances')
+                        ->columnSpanFull(),
+                    Textarea::make('deductions')
+                        ->columnSpanFull(),
+                    TextInput::make('net_salary')
+                        ->required()
+                        ->numeric(),
+                ])->columns(2)
             ]);
     }
 

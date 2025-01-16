@@ -4,10 +4,14 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Employee;
 use Filament\Forms\Form;
 use App\Models\Department;
 use Filament\Tables\Table;
+use App\Enums\EmployeeTypeEnum;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -26,14 +30,18 @@ class DepartmentResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required(),
-                Textarea::make('description')
-                    ->required()
-                    ->columnSpanFull(),
-                TextInput::make('manager_id')
-                    ->required()
-                    ->numeric(),
+                Section::make([
+                    TextInput::make('name')
+                        ->required(),
+                    Select::make('manager_id')
+                        ->label('Manager')
+                        ->options(Employee::where('type',EmployeeTypeEnum::Manager->value)->pluck('name', 'id'))
+                        ->searchable(),
+                    Textarea::make('description')
+                        ->required()
+                        ->columnSpanFull(),
+                    
+                ])->columns(2)
             ]);
     }
 
@@ -43,8 +51,7 @@ class DepartmentResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('manager_id')
-                    ->numeric()
+                TextColumn::make('manager.email')
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -59,6 +66,7 @@ class DepartmentResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -81,6 +89,7 @@ class DepartmentResource extends Resource
             'index' => Pages\ListDepartments::route('/'),
             'create' => Pages\CreateDepartment::route('/create'),
             'edit' => Pages\EditDepartment::route('/{record}/edit'),
+            'view' => Pages\ViewDepartment::route('/{record}'),
         ];
     }
 }

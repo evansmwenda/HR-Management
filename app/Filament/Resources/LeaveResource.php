@@ -5,9 +5,15 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Leave;
+use App\Models\Employee;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use App\Enums\LeaveTypeEnum;
+use App\Enums\LeaveStatusEnum;
+use App\Enums\EmployeeTypeEnum;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -27,22 +33,40 @@ class LeaveResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('employee_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('leave_type')
-                    ->required(),
-                DatePicker::make('start_date')
-                    ->required(),
-                DatePicker::make('end_date')
-                    ->required(),
-                TextInput::make('leave_status')
-                    ->required(),
-                Textarea::make('reason')
-                    ->columnSpanFull(),
-                TextInput::make('approvied_by')
-                    ->required()
-                    ->numeric(),
+                Section::make([
+                    Select::make('employee_id')
+                        ->label('Employee')
+                        ->required()
+                        ->preload()
+                        ->options(Employee::all()->map(function ($employee) {
+                            return [
+                                'id' => $employee->id,
+                                'name' => $employee->first_name . ' ' . $employee->last_name,
+                            ];
+                        })->pluck('name', 'id'))
+                        ->searchable(),
+                    Select::make('leave_type')
+                        ->label('Leave Type')
+                        ->options(collect(LeaveTypeEnum::cases())->pluck('value', 'name')->toArray())
+                        ->searchable()
+                        ->required(),
+                    DatePicker::make('start_date')
+                        ->required(),
+                    DatePicker::make('end_date')
+                        ->required(),
+                    Select::make('leave_status')
+                        ->label('Leave Status')
+                        ->options(collect(LeaveStatusEnum::cases())->pluck('value', 'name')->toArray())
+                        ->searchable()
+                        ->required(),
+                    Select::make('approved_by')
+                        ->label('Approved By')
+                        ->options(Employee::where('type',EmployeeTypeEnum::Manager->value)->pluck('name', 'id'))
+                        ->searchable(),
+                    Textarea::make('reason')
+                        ->columnSpanFull(),
+                ])->columns(2)
+                
             ]);
     }
 

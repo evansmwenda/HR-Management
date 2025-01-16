@@ -4,14 +4,18 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\Employee;
 use Filament\Forms\Form;
 use App\Models\Attendance;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\TimePicker;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\AttendanceResource\Pages;
@@ -27,17 +31,23 @@ class AttendanceResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('employee_id')
-                    ->required()
-                    ->numeric(),
-                DatePicker::make('date')
-                    ->required(),
-                TextInput::make('check_in'),
-                TextInput::make('check_out'),
-                TextInput::make('status')
-                    ->required(),
-                Textarea::make('notes')
-                    ->columnSpanFull(),
+                Section::make([
+                    Select::make('employee_id')
+                        ->label('Employee')
+                        ->required()
+                        ->preload()
+                        ->options(Employee::all()->map(function ($employee) {
+                            return [
+                                'id' => $employee->id,
+                                'name' => $employee->first_name . ' ' . $employee->last_name,
+                            ];
+                        })->pluck('name', 'id'))
+                        ->searchable(),
+                    DatePicker::make('date')
+                        ->required(),
+                    TimePicker::make('check_in'),
+                    TimePicker::make('check_out'),
+                ])->columns(2)
             ]);
     }
 
@@ -45,9 +55,8 @@ class AttendanceResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('employee_id')
-                    ->numeric()
-                    ->sortable(),
+                TextColumn::make('employee.name')
+                    ->searchable(),
                 TextColumn::make('date')
                     ->date()
                     ->sortable(),
@@ -68,6 +77,7 @@ class AttendanceResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -90,6 +100,7 @@ class AttendanceResource extends Resource
             'index' => Pages\ListAttendances::route('/'),
             'create' => Pages\CreateAttendance::route('/create'),
             'edit' => Pages\EditAttendance::route('/{record}/edit'),
+            'view' => Pages\ViewAttendance::route('/{record}'),
         ];
     }
 }

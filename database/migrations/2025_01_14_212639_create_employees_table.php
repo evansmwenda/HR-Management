@@ -1,9 +1,10 @@
 <?php
 
-use App\Enums\EmployeeStatus;
-use App\Enums\EmployeeStatusEnum;
 use App\Models\Position;
 use App\Models\Department;
+use App\Enums\EmployeeStatus;
+use App\Enums\EmployeeTypeEnum;
+use App\Enums\EmployeeStatusEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->foreignIdFor(Position::class)->constrained();
             $table->date('hire_date');
             $table->string('status')->default(EmployeeStatusEnum::Active->value);
+            $table->string('type')->default(EmployeeTypeEnum::Normal->value);
             $table->string('address')->nullable();
             $table->string('emergency_contact')->nullable();
             $table->timestamps();
