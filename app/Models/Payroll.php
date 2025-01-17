@@ -20,6 +20,14 @@ class Payroll extends Model
         'net_salary',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'allowances' => 'array',
+            'deductions' => 'array',
+        ];
+    }
+
     public function employee()
     {
         return $this->belongsTo(Employee::class);

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('end_date');
             $table->string('leave_status')->default(LeaveStatusEnum::Pending->value);
             $table->text('reason')->nullable();
-            $table->foreignId('approvied_by')->constrained('users')->nullable();
+            $table->foreignId('approved_by')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

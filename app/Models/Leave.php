@@ -15,7 +15,7 @@ class Leave extends Model
         'leave_type',
         'start_date',
         'end_date',
-        'status',
+        'leave_status',
         'reason',
         'approved_by',
     ];
@@ -25,8 +25,8 @@ class Leave extends Model
         return $this->belongsTo(Employee::class);
     }
 
-    public function approver()
-    {
-        return $this->belongsTo(Manager::class);
-    }
+    // public function approver()
+    // {
+    //     return $this->belongsTo(Manager::class);
+    // }
 }

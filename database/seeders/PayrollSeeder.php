@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Payroll;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PayrollSeeder extends Seeder
 {
@@ -12,6 +13,6 @@ class PayrollSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Payroll::factory(300)->create();
     }
 }

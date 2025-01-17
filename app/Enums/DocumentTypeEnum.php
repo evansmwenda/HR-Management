@@ -10,4 +10,7 @@ enum DocumentTypeEnum: string
     case Coverletter = 'cover_letter';
     case Contract = 'contract';
     case LeaveApplication = 'leave_application';
+    case GoodConduct = 'good_conduct';
 }
+
+

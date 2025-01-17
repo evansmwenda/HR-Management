@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Document;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DocumentSeeder extends Seeder
 {
@@ -12,6 +13,6 @@ class DocumentSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Document::factory(200)->create();
     }
 }
